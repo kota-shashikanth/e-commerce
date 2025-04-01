@@ -1,0 +1,10 @@
+### Create Order - Success Case
+POST http://localhost:8083/api/orders
+Content-Type: application/json
+
+{
+  "orderId": "123",
+  "name": "Test Product",
+  "qty": 2,
+  "price": 29.99
+}
