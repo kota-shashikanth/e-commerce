@@ -1,6 +1,38 @@
 version: '3.8'
 
 services:
+  # MongoDB
+  mongo:
+    image: mongo
+    container_name: eCommerce-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: [ "CMD-SHELL", "mongosh --eval \"db.runCommand({ping:1}).ok\" --quiet" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB Express (Web UI)
+  mongo-express:
+    image: mongo-express
+    container_name: eCommerce-mongo-express
+    restart: always
+    ports:
+      - "8085:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password@mongo:27017/
+    depends_on:
+      mongo:
+        condition: service_healthy
   # Kafka Service (KRaft mode - no Zookeeper required)
   kafka:
     image: apache/kafka:4.0.0
@@ -28,7 +60,7 @@ services:
   # Kafka UI for monitoring
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
+    container_name: eCommerce-kafka-ui
     depends_on:
       kafka:
         condition: service_healthy
@@ -44,7 +76,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: order-service
-    container_name: order-service
+    container_name: eCommerce-order-service
     depends_on:
       kafka:
         condition: service_healthy
@@ -60,14 +92,22 @@ services:
       context: .
       dockerfile: Dockerfile
       target: inventory-service
-    container_name: inventory-service
+    container_name: eCommerce-inventory-service
     depends_on:
       kafka:
+        condition: service_healthy
+      mongo:
         condition: service_healthy
     ports:
       - "8082:8082"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_DATA_MONGODB_HOST: mongo
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: e-commerce
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
     restart: on-failure
 
   # Email Service
@@ -76,7 +116,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: email-service
-    container_name: email-service
+    container_name: eCommerce-email-service
     depends_on:
       kafka:
         condition: service_healthy
@@ -85,3 +125,6 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     restart: on-failure
+
+volumes:
+  mongo-data:

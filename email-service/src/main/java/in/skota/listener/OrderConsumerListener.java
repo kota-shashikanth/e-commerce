@@ -1,14 +1,14 @@
-package in.skota.service;
+package in.skota.listener;
 
 import in.skota.dtos.Order;
 import in.skota.dtos.OrderEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @Slf4j
-public class OrderConsumerService {
+public class OrderConsumerListener {
 
     @KafkaListener(
             topics = "${spring.kafka.topic.name}",

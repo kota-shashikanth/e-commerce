@@ -1,0 +1,185 @@
+@baseUrl = http://localhost:8082/api
+@orderUrl = http://localhost:8083/api
+@inventoryId =
+
+### 1. Get All Inventory Items (Initial State)
+GET {{baseUrl}}/inventory
+
+### 2. Create New Inventory Item
+POST {{baseUrl}}/inventory
+Content-Type: application/json
+
+{
+  "productId": "P010",
+  "productName": "Integration Test Product",
+  "quantity": 50,
+  "price": 19.99,
+  "category": "Test",
+  "isInStock": true
+}
+
+> {%
+    client.test("Create Inventory Item - Status Code", function () {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+
+    client.test("Create Inventory Item - Response has ID", function () {
+        client.assert(response.body.id !== null, "Response does not contain ID");
+        client.global.set("inventoryId", response.body.id);
+    });
+
+    client.test("Create Inventory Item - Product Name", function () {
+        client.assert(response.body.productName === "Integration Test Product", "Product name does not match");
+    });
+%}
+
+### 3. Get Inventory Item by ProductId
+GET {{baseUrl}}/inventory/P010
+
+> {%
+    client.test("Get Inventory Item - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Get Inventory Item - Product Name", function () {
+        client.assert(response.body.productName === "Integration Test Product", "Product name does not match");
+    });
+
+    client.test("Get Inventory Item - Quantity", function () {
+        client.assert(response.body.quantity === 50, "Quantity does not match");
+    });
+%}
+
+### 4. Update Inventory Item
+PUT {{baseUrl}}/inventory/{{inventoryId}}
+Content-Type: application/json
+
+{
+  "productId": "P010",
+  "productName": "Updated Test Product",
+  "quantity": 45,
+  "price": 24.99,
+  "category": "Test",
+  "isInStock": true
+}
+
+> {%
+    client.test("Update Inventory Item - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Update Inventory Item - Product Name", function () {
+        client.assert(response.body.productName === "Updated Test Product", "Product name does not match");
+    });
+
+    client.test("Update Inventory Item - Quantity", function () {
+        client.assert(response.body.quantity === 45, "Quantity does not match");
+    });
+%}
+
+### 5. Create Order for Inventory Item
+POST {{orderUrl}}/orders
+Content-Type: application/json
+
+{
+  "orderId": "5678",
+  "name": "Updated Test Product",
+  "qty": 5,
+  "price": 24.99
+}
+
+> {%
+    client.test("Create Order - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Create Order - Response Message", function () {
+        client.assert(response.body === "Order sent to Kafka successfully", "Response message does not match");
+    });
+%}
+
+### 6. Wait for Kafka Processing (5 seconds)
+# This is a dummy request to add a delay for Kafka processing
+GET {{baseUrl}}/inventory
+Content-Type: application/json
+
+> {%
+    // Add a delay to allow Kafka to process the message
+    client.global.clearTimeout();
+    client.global.setTimeout(function () {
+        // This will execute after the timeout
+    }, 5000);
+%}
+
+### 7. Verify Inventory Update After Order
+GET {{baseUrl}}/inventory/P010
+
+> {%
+    client.test("Verify Inventory Update - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Verify Inventory Update - Product Name", function () {
+        client.assert(response.body.productName === "Updated Test Product", "Product name does not match");
+    });
+
+    client.test("Verify Inventory Update - Quantity Reduced", function () {
+        client.assert(response.body.quantity === 40, "Quantity was not reduced correctly");
+    });
+%}
+
+### 8. Test Order with Insufficient Inventory
+POST {{orderUrl}}/orders
+Content-Type: application/json
+
+{
+  "orderId": "9999",
+  "name": "Updated Test Product",
+  "qty": 50,
+  "price": 24.99
+}
+
+> {%
+    client.test("Create Order (Insufficient Inventory) - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Create Order (Insufficient Inventory) - Response Message", function () {
+        client.assert(response.body === "Order sent to Kafka successfully", "Response message does not match");
+    });
+%}
+
+### 9. Wait for Kafka Processing (5 seconds)
+# This is a dummy request to add a delay for Kafka processing
+GET {{baseUrl}}/inventory
+Content-Type: application/json
+
+> {%
+    // Add a delay to allow Kafka to process the message
+    client.global.clearTimeout();
+    client.global.setTimeout(function () {
+        // This will execute after the timeout
+    }, 5000);
+%}
+
+### 10. Verify Inventory Not Changed (Insufficient Stock)
+GET {{baseUrl}}/inventory/P010
+
+> {%
+    client.test("Verify Inventory Unchanged - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Verify Inventory Unchanged - Quantity Still 40", function () {
+        client.assert(response.body.quantity === 40, "Quantity should not have changed");
+    });
+%}
+
+### 11. Clean Up - Delete Test Inventory Item
+DELETE {{baseUrl}}/inventory/{{inventoryId}}
+
+> {%
+    client.test("Delete Inventory Item - Status Code", function () {
+        client.assert(response.status === 204, "Response status is not 204");
+    });
+%}

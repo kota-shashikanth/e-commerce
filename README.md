@@ -171,6 +171,53 @@ docker-compose logs email-service
 
 You can also access the Kafka UI at http://localhost:8080 to monitor topics, messages, and consumer groups.
 
+### MongoDB and Inventory Management
+
+The application uses MongoDB to store inventory data. You can access the MongoDB Express UI at http://localhost:8085 to
+view and manage the database.
+
+#### Testing MongoDB Connection
+
+To test the MongoDB connection, you can use the provided test script:
+
+```bash
+# After starting the containers
+mongosh "mongodb://admin:password@localhost:27017/e-commerce?authSource=admin" --file test-mongodb.js
+```
+
+#### Initialize Inventory Data
+
+To initialize the inventory with sample data, you can use the provided script:
+
+```bash
+# After starting the containers
+mongosh "mongodb://admin:password@localhost:27017/e-commerce?authSource=admin" --file init-inventory.js
+```
+
+#### Inventory API Endpoints
+
+The inventory service provides the following REST endpoints:
+
+- `GET /api/inventory` - Get all inventory items
+- `GET /api/inventory/{productId}` - Get inventory by product ID
+- `POST /api/inventory` - Create a new inventory item
+- `PUT /api/inventory/{id}` - Update an existing inventory item
+
+Example to create a new inventory item:
+
+```bash
+curl -X POST http://localhost:8082/api/inventory \
+-H "Content-Type: application/json" \
+-d '{
+    "productId": "P009",
+    "productName": "New Product",
+    "quantity": 25,
+    "price": 39.99,
+    "category": "New Category",
+    "isInStock": true
+}'
+```
+
 ```bash
 # Order Service logs should show:
 "Sending order event to Kafka => OrderEvent(...)"
@@ -279,14 +326,17 @@ spring.kafka.topic.name=orders_topic
 
 - Spring Boot 3.x
 - Apache Kafka 4.0.0 (KRaft mode - no Zookeeper required)
+- MongoDB
 - Maven
 - Java 17 (Amazon Corretto)
 - Lombok
 - Spring Kafka
+- Spring Data MongoDB
 - Spring Validation
 - Spring Web
 - Docker & Docker Compose
 - Kafka UI for monitoring
+- MongoDB Express for database management
 
 ## Docker Setup
 

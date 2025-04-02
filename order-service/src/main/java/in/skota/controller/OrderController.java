@@ -1,7 +1,7 @@
 package in.skota.controller;
 
 import in.skota.dtos.Order;
-import in.skota.service.OrderProducerService;
+import in.skota.producer.OrderProducer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +21,12 @@ import java.util.concurrent.ExecutionException;
 @Validated
 public class OrderController {
 
-    private final OrderProducerService orderProducerService;
+    private final OrderProducer orderProducer;
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody @Valid Order order) {
         try {
-            orderProducerService.sendOrder(order).get();
+            orderProducer.sendOrder(order).get();
             return ResponseEntity.ok("Order sent to Kafka successfully");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
