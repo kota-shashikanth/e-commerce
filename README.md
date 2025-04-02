@@ -24,15 +24,16 @@ microservices that communicate through Kafka events.
                            │
                  Consumes  │  Consumes
                  Events    │  Events
-            ┌─────────────┴────────────┐
-            │                          │
-     ┌──────┴───────┐          ┌─────-─┴───────┐
-     │              │          │               │
-     │  Inventory   │          │    Email      │
-     │   Service    │          │   Service     │
-     │    (8082)    │          │    (8081)     │
-     │              │          │               │
-     └──────────────┘          └──────────────-┘
+                           ▼
+             ┌─────────────-────────────┐
+             │                          │
+      ┌──────┴───────┐          ┌─────-─┴───────┐
+      │              │          │               │
+      │  Inventory   │          │    Email      │
+      │   Service    │          │   Service     │
+      │    (8082)    │          │    (8081)     │
+      │              │          │               │
+      └──────────────┘          └──────────────-┘
 ```
 
 ## Prerequisites
