@@ -40,8 +40,7 @@ microservices that communicate through Kafka events.
 
 - Java 17
 - Maven
-- Apache Kafka 3.x
-- Zookeeper
+- Apache Kafka 4.0.0 (KRaft mode - no Zookeeper required)
 
 ## Services
 
@@ -67,19 +66,22 @@ microservices that communicate through Kafka events.
 
 ## Setup
 
-1. Start Zookeeper:
+### Option 1: Running Locally
+
+1. Start Kafka (in KRaft mode):
 
 ```bash
-zookeeper-server-start.bat config/zookeeper.properties
+# Generate cluster ID if needed
+kafka-storage.sh random-uuid
+
+# Format storage directory
+kafka-storage.sh format -t <cluster-id> -c config/kraft/server.properties
+
+# Start Kafka
+kafka-server-start.bat config/kraft/server.properties
 ```
 
-2. Start Kafka:
-
-```bash
-kafka-server-start.bat config/server.properties
-```
-
-3. Build the project:
+2. Build the project:
 
 ```bash
 mvn clean install
@@ -101,6 +103,30 @@ cd email-service
 mvn spring-boot:run
 ```
 
+### Option 2: Running with Docker (Recommended)
+
+You can run the entire application stack (including Kafka in KRaft mode) using Docker Compose. This is the recommended
+approach as it ensures all services are properly configured to work together:
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+This will start:
+
+- Kafka on port 9092 (in KRaft mode - no Zookeeper required)
+- Kafka UI on port 8080
+- Order Service on port 8083
+- Inventory Service on port 8082
+- Email Service on port 8081
+
 ## Testing
 
 ### Create an Order
@@ -118,6 +144,8 @@ curl -X POST http://localhost:8083/api/orders \
 }'
 ```
 
+You should receive a response: `Order sent to Kafka successfully`
+
 ### Verify Kafka Integration
 
 When you create an order:
@@ -127,6 +155,21 @@ When you create an order:
 3. The Email Service will consume the event and send an email notification
 
 Check the logs of each service to verify the event flow:
+
+```bash
+# Check Order Service logs
+docker-compose logs order-service
+
+# Check Inventory Service logs
+docker-compose logs inventory-service
+
+# Check Email Service logs
+docker-compose logs email-service
+```
+
+### Kafka UI
+
+You can also access the Kafka UI at http://localhost:8080 to monitor topics, messages, and consumer groups.
 
 ```bash
 # Order Service logs should show:
@@ -235,13 +278,36 @@ spring.kafka.topic.name=orders_topic
 ## Technologies Used
 
 - Spring Boot 3.x
-- Apache Kafka
+- Apache Kafka 4.0.0 (KRaft mode - no Zookeeper required)
 - Maven
-- Java 17
+- Java 17 (Amazon Corretto)
 - Lombok
 - Spring Kafka
 - Spring Validation
 - Spring Web
+- Docker & Docker Compose
+- Kafka UI for monitoring
+
+## Docker Setup
+
+This project uses a single Dockerfile at the root level to build all services. The Dockerfile uses a multi-stage build
+approach:
+
+1. First stage builds all modules in a single build
+2. Subsequent stages create separate images for each service
+
+The docker-compose.yml file is configured to use Apache Kafka 4.0.0 in KRaft mode, which eliminates the need for
+Zookeeper.
+
+## Kafka KRaft Mode
+
+KRaft (Kafka Raft) mode is a new architecture introduced in Apache Kafka that removes the dependency on Zookeeper.
+Benefits include:
+
+- Simplified architecture with fewer components to manage
+- Improved scalability and performance
+- Better fault tolerance
+- Reduced operational complexity
 
 ## Kafka Concepts Used
 

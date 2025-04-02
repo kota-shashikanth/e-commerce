@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Build files
+**/target/
+**/build/
+**/out/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+
+# Logs
+logs/
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
