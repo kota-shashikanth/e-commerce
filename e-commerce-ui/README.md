@@ -1,59 +1,112 @@
-# ECommerceUi
+# E-Commerce UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+This is the frontend application for the E-Commerce Microservices project. It provides a user interface for interacting with the backend microservices.
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                                                         │
+│                        Angular Frontend (4200)                          │
+│                                                                         │
+│  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────────┐   │
+│  │                 │   │                 │   │                     │   │
+│  │  Dashboard      │   │  Theme          │   │  Other Components   │   │
+│  │  Component      │   │  Switcher       │   │                     │   │
+│  │                 │   │                 │   │                     │   │
+│  └────────┬────────┘   └─────────────────┘   └─────────────────────┘   │
+│           │                                                             │
+│           │                                                             │
+│  ┌────────▼────────┐                                                    │
+│  │                 │                                                    │
+│  │  Inventory      │                                                    │
+│  │  Service        │                                                    │
+│  │                 │                                                    │
+│  └────────┬────────┘                                                    │
+│           │                                                             │
+└───────────┼─────────────────────────────────────────────────────────────┘
+            │
+            │ HTTP Requests
+            │
+┌───────────▼─────────────────────────────────────────────────────────────┐
+│                                                                         │
+│                         Backend Microservices                           │
+│                                                                         │
+│  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────────┐   │
+│  │                 │   │                 │   │                     │   │
+│  │  Order Service  │◄──┼───┐ Kafka Topic │◄──┤  Inventory Service  │   │
+│  │  (8083)         │   │   │ (orders)    │   │  (8082)             │   │
+│  │                 │   │   │             │   │                     │   │
+│  └─────────────────┘   │   └─────┬───────┘   └─────────┬───────────┘   │
+│                        │         │                     │               │
+│                        │         │                     │               │
+│                        │         ▼                     ▼               │
+│                        │  ┌─────────────────┐  ┌─────────────────┐     │
+│                        │  │                 │  │                 │     │
+│                        └──►  Email Service  │  │  MongoDB        │     │
+│                           │  (8081)         │  │  (27017)        │     │
+│                           │                 │  │                 │     │
+│                           └─────────────────┘  └─────────────────┘     │
+│                                                                        │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+## Technology Stack
+
+- **Frontend**: Angular 19, TailwindCSS, DaisyUI
+- **Backend**: Spring Boot, Apache Kafka, MongoDB
+- **Containerization**: Docker, Docker Compose
+
+## Features
+
+- Modern UI with responsive design using TailwindCSS and DaisyUI components
+- Theme switching capability with multiple pre-configured themes
+- Real-time inventory display
+- Integration with backend microservices
 
 ## Development server
 
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+This command uses the proxy configuration to route API requests to the appropriate backend services. Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+## Building for Production
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+To build the project for production, run:
 
 ```bash
-ng generate component component-name
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+This will compile your project and store the build artifacts in the `dist/` directory with production optimizations.
+
+## Docker Support
+
+The application includes Docker support for easy deployment:
 
 ```bash
-ng generate --help
+# Build Docker image
+npm run docker:build
+
+# Run Docker container
+npm run docker:run
 ```
 
-## Building
+## Integration with Backend Services
 
-To build the project run:
+The UI communicates with the following backend services:
 
-```bash
-ng build
-```
+- **Order Service** (port 8083): For creating and managing orders
+- **Inventory Service** (port 8082): For retrieving inventory information
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+API requests are proxied through the development server using the configuration in `proxy.conf.json`.
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular Documentation](https://angular.dev/)
+- [TailwindCSS Documentation](https://tailwindcss.com/docs)
+- [DaisyUI Documentation](https://daisyui.com/docs/)
