@@ -4,7 +4,7 @@ version: '3.8'
 # You can still use the individual files for more granular control
 
 # To start all services:
-# docker-compose up -d
+# docker-compose -f docker-compose.main.yml up -d
 
 # To start only specific stacks:
 # docker-compose -f docker-compose.mongo.yml -f docker-compose.kafka.yml up -d
@@ -15,39 +15,39 @@ services:
     extends:
       file: docker-compose.mongo.yml
       service: mongo
-
+  
   mongo-express:
     extends:
       file: docker-compose.mongo.yml
       service: mongo-express
-
+  
   # Kafka services (from docker-compose.kafka.yml)
   kafka:
     extends:
       file: docker-compose.kafka.yml
       service: kafka
-
+  
   kafka-ui:
     extends:
       file: docker-compose.kafka.yml
       service: kafka-ui
-
+  
   # Microservices (from docker-compose.services.yml)
   order-service:
     extends:
       file: docker-compose.services.yml
       service: order-service
-
+  
   inventory-service:
     extends:
       file: docker-compose.services.yml
       service: inventory-service
-
+  
   email-service:
     extends:
       file: docker-compose.services.yml
       service: email-service
-
+  
   # UI (from docker-compose.ui.yml)
   e-commerce-ui:
     extends:

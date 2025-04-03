@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  # Angular UI
+  e-commerce-ui:
+    build:
+      context: ./e-commerce-ui
+      dockerfile: Dockerfile
+    container_name: eCommerce-ui
+    ports:
+      - "4200:80"
+    restart: on-failure
