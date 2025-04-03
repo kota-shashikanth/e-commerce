@@ -1,0 +1,12 @@
+@if (MENU_ITEMS.length > 0) {
+  @for (item of MENU_ITEMS; track item.route) {
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost m-1">{{ item.name }}</div>
+      <ul tabindex="0" class="dropdown-content menu bg-base-300 text-base-content rounded-box z-1 w-52 p-2 shadow-sm">
+        @for (child of item.children; track child.route) {
+          <li><a [routerLink]="item.route + '/' + child.route">{{ child.name }}</a></li>
+        }
+      </ul>
+    </div>
+  }
+}

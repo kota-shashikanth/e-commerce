@@ -1,0 +1,63 @@
+# Inventory Service Tests
+
+### Get All Inventory Items
+GET http://localhost:8082/api/inventory
+
+### Get Inventory Item by ProductId
+GET http://localhost:8082/api/inventory/P001
+
+### Create New Inventory Item
+POST http://localhost:8082/api/inventory
+Content-Type: application/json
+
+{
+  "productId": "P010",
+  "productName": "Integration Test Product",
+  "quantity": 50,
+  "price": 19.99,
+  "category": "Test",
+  "isInStock": true
+}
+
+### Update Inventory Item
+# First, get the ID from the GET all inventory response
+PUT http://localhost:8082/api/inventory/{{inventory_id}}
+Content-Type: application/json
+
+{
+  "productId": "P010",
+  "productName": "Updated Test Product",
+  "quantity": 45,
+  "price": 24.99,
+  "category": "Test",
+  "isInStock": true
+}
+
+### Order Service Tests
+
+### Create Order - Success Case
+POST http://localhost:8083/api/orders
+Content-Type: application/json
+
+{
+  "orderId": "1234",
+  "name": "Test Product 2.0",
+  "qty": 12,
+  "price": 9.39
+}
+
+### Create Order for Inventory Item
+# This will trigger inventory update
+POST http://localhost:8083/api/orders
+Content-Type: application/json
+
+{
+  "orderId": "5678",
+  "name": "Integration Test Product",
+  "qty": 5,
+  "price": 19.99
+}
+
+### Verify Inventory Update After Order
+# Check that quantity has been reduced
+GET http://localhost:8082/api/inventory/P010

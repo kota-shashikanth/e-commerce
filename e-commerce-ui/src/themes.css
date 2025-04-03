@@ -1,0 +1,12 @@
+@plugin "daisyui" {
+  themes: all
+}
+
+:root {
+  /* Global theme customizations that apply to all themes */
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+}

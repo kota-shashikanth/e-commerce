@@ -18,6 +18,8 @@
         <spring.boot.skip>true</spring.boot.skip>
     </properties>
 
+    <!-- No additional dependencies needed -->
+
     <build>
         <plugins>
             <plugin>

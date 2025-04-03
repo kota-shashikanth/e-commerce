@@ -1,0 +1,18 @@
+<div class="dropdown">
+  <div class="btn btn-ghost m-1" role="button" tabindex="0">
+    <span class="icon-[bxs--color-fill]"></span>
+  </div>
+  <ul class="dropdown-content bg-base-300 text-base-content rounded-box z-1 w-52 p-2 shadow-2xl max-h-96 overflow-y-auto"
+      tabindex="0">
+    @for (theme of DAISY_THEMES; track theme) {
+      <li>
+        <input
+          type="radio"
+          name="theme-dropdown" [checked]="currentTheme === theme"
+          class="theme-controller w-full btn btn-sm btn-block {{currentTheme === theme ? 'btn-primary' : btn-ghost'}} justify-start"
+          [attr.aria-label]="theme"
+          value="{{theme}}" (change)="changeTheme(theme)"/>
+      </li>
+    }
+  </ul>
+</div>
