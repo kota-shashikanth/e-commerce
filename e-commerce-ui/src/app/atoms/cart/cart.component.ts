@@ -12,6 +12,15 @@ export class CartComponent {
     private cartService = inject(CartService);
     cartItems$ = this.cartService.cartItems$;
 
+  // Category-based placeholder images
+  private placeholderImages = {
+    'Electronics': 'https://placehold.co/600x400/3d4451/ffffff?text=Electronics',
+    'Clothing': 'https://placehold.co/600x400/3d4451/ffffff?text=Clothing',
+    'Books': 'https://placehold.co/600x400/3d4451/ffffff?text=Books',
+    'Home': 'https://placehold.co/600x400/3d4451/ffffff?text=Home',
+    'default': 'https://placehold.co/600x400/3d4451/ffffff?text=Product'
+  };
+
     getCartTotal(): number {
         return this.cartService.getCartTotal();
     }
@@ -31,4 +40,12 @@ export class CartComponent {
     clearCart(): void {
         this.cartService.clearCart();
     }
+
+  getPlaceholderImage(category: string): string {
+    return this.placeholderImages[category] || this.placeholderImages['default'];
+  }
+
+  onImageError(event: any, category: string): void {
+    event.target.src = this.getPlaceholderImage(category);
+  }
 }

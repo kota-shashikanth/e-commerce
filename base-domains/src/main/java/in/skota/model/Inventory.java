@@ -23,6 +23,7 @@ public class Inventory {
     private double price;
     private String category;
     private boolean isInStock;
+    private String imageUrl;
 
     // Helper method to check if there's enough stock
     public boolean hasStock(int requiredQuantity) {

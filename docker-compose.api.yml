@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # MongoDB services (from docker-compose.mongo.yml)
+  mongo:
+    extends:
+      file: docker-compose.mongo.yml
+      service: mongo
+
+  mongo-express:
+    extends:
+      file: docker-compose.mongo.yml
+      service: mongo-express
+
+  # Kafka services (from docker-compose.kafka.yml)
+  kafka:
+    extends:
+      file: docker-compose.kafka.yml
+      service: kafka
+
+  kafka-ui:
+    extends:
+      file: docker-compose.kafka.yml
+      service: kafka-ui
+
+  # Microservices (from docker-compose.services.yml)
+  order-service:
+    extends:
+      file: docker-compose.services.yml
+      service: order-service
+
+  inventory-service:
+    extends:
+      file: docker-compose.services.yml
+      service: inventory-service
+
+  email-service:
+    extends:
+      file: docker-compose.services.yml
+      service: email-service
+
+volumes:
+  mongo-data:
