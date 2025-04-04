@@ -1,0 +1,101 @@
+version: '3.8'
+
+# Development-focused docker-compose file that rebuilds services
+# Use this during development to ensure changes are reflected in containers
+
+services:
+  # Order Service
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: order-service
+    container_name: eCommerce-order-service-dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    volumes:
+      - ./order-service/src:/workspace/app/order-service/src
+      - ./base-domains/src:/workspace/app/base-domains/src
+    restart: on-failure
+    # Force rebuild on every up command
+    image: order-service:dev
+
+  # Inventory Service
+  inventory-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: inventory-service
+    container_name: eCommerce-inventory-service-dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_DATA_MONGODB_HOST: mongo
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: e-commerce
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+    volumes:
+      - ./inventory-service/src:/workspace/app/inventory-service/src
+      - ./base-domains/src:/workspace/app/base-domains/src
+    restart: on-failure
+    # Force rebuild on every up command
+    image: inventory-service:dev
+
+  # Email Service
+  email-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: email-service
+    container_name: eCommerce-email-service-dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    volumes:
+      - ./email-service/src:/workspace/app/email-service/src
+      - ./base-domains/src:/workspace/app/base-domains/src
+    restart: on-failure
+    # Force rebuild on every up command
+    image: email-service:dev
+
+  # MongoDB services
+  mongo:
+    extends:
+      file: docker-compose.mongo.yml
+      service: mongo
+
+  mongo-express:
+    extends:
+      file: docker-compose.mongo.yml
+      service: mongo-express
+
+  # Kafka services
+  kafka:
+    extends:
+      file: docker-compose.kafka.yml
+      service: kafka
+
+  kafka-ui:
+    extends:
+      file: docker-compose.kafka.yml
+      service: kafka-ui
+
+volumes:
+  mongo-data:

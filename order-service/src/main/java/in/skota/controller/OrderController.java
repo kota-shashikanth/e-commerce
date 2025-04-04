@@ -1,5 +1,6 @@
 package in.skota.controller;
 
+import in.skota.annotation.LogEndpoint;
 import in.skota.dtos.Order;
 import in.skota.producer.OrderProducer;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@LogEndpoint(description = "Order API endpoints")
 public class OrderController {
 
     private final OrderProducer orderProducer;

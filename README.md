@@ -64,6 +64,13 @@ microservices that communicate through Kafka events.
 - Uses consumer group ID `email-service`
 - Processes order events and sends email notifications
 
+### Base Domains Module
+
+- Contains shared domain objects, DTOs, and utilities
+- Provides cross-cutting concerns like logging aspects
+- Includes the `@LogEndpoint` annotation for automatic endpoint logging
+- See [Base Domains README](base-domains/README.md) for more details
+
 ## Setup
 
 ### Option 1: Running Locally
@@ -126,6 +133,38 @@ This will start:
 - Order Service on port 8083
 - Inventory Service on port 8082
 - Email Service on port 8081
+
+### Option 3: Development Mode with Auto-Rebuild
+
+For development, you can use the development-focused Docker Compose configuration that rebuilds services automatically:
+
+```bash
+# On Linux/macOS
+chmod +x rebuild-services.sh
+
+# Rebuild and restart all services
+./rebuild-services.sh
+
+# Rebuild and restart a specific service
+./rebuild-services.sh order-service
+```
+
+On Windows:
+
+```batch
+:: Rebuild and restart all services
+rebuild-services.bat
+
+:: Rebuild and restart a specific service
+rebuild-services.bat order-service
+```
+
+This development setup:
+
+- Uses a dedicated Docker Compose file (`docker-compose.dev.yml`)
+- Rebuilds services when you run the script
+- Mounts source directories as volumes for faster development
+- Preserves the same ports and dependencies as the production setup
 
 ## Testing
 
@@ -272,13 +311,20 @@ e-commerce/
 │           └── resources/
 │               └── application.properties
 └── base-domains/
+    ├── README.md
     └── src/
         └── main/
             └── java/
                 └── in/skota/
-                    └── dtos/
-                        ├── Order.java
-                        └── OrderEvent.java
+                    ├── dtos/
+                    │   ├── Order.java
+                    │   └── OrderEvent.java
+                    ├── annotation/
+                    │   └── LogEndpoint.java
+                    ├── aspect/
+                    │   └── EndpointLoggingAspect.java
+                    └── config/
+                        └── AspectConfig.java
 ```
 
 ## Configuration

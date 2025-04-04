@@ -5,7 +5,7 @@
       (error)="onImageError($event)"
       [alt]="item.productName"
       [src]="item.imageUrl || getPlaceholderImage()"
-      class="object-cover w-full h-full transition-transform hover:scale-105"
+      class="object-cover transition-transform hover:scale-105"
     />
     <div class="absolute top-2 right-2">
       <div class="badge badge-info badge-outline">{{ item.category }}</div>

@@ -1,5 +1,6 @@
 package in.skota.controller;
 
+import in.skota.annotation.LogEndpoint;
 import in.skota.model.Inventory;
 import in.skota.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/inventory")
 @RequiredArgsConstructor
+@LogEndpoint(description = "Inventory API endpoints")
 public class InventoryController {
 
     private final InventoryService inventoryService;
