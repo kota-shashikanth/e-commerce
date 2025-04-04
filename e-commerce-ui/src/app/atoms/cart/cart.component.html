@@ -1,0 +1,67 @@
+<div class="dropdown dropdown-end">
+    <div class="btn btn-ghost m-1" role="button" tabindex="0">
+        <app-cart-icon [itemCount]="getCartItemCount()" badgeClass="text-primary"></app-cart-icon>
+    </div>
+
+    <div class="dropdown-content bg-base-300 text-base-content rounded-box z-10 w-80 p-4 shadow-2xl max-h-96 overflow-y-auto"
+         tabindex="0">
+        <div class="flex flex-col gap-3">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Shopping Cart</h3>
+                @if (getCartItemCount() > 0) {
+                    <button class="btn btn-ghost btn-xs" (click)="clearCart()">
+                        <span class="icon-[bx--trash]"></span> Clear
+                    </button>
+                }
+            </div>
+
+            <div class="divider my-0"></div>
+
+            @if ((cartItems$ | async)?.length) {
+                @for (item of cartItems$ | async; track item.id) {
+                    <div class="flex justify-between gap-2">
+                        <div class="flex-1">
+                            <h4 class="font-medium">{{ item.productName }}</h4>
+                            <div class="text-sm opacity-70">{{ item.price | currency }}</div>
+                        </div>
+
+                        <div class="flex items-center gap-1">
+                            <button class="btn btn-xs btn-circle btn-ghost"
+                                    (click)="updateQuantity(item.id, item.quantity - 1)">
+                                <span class="icon-[bx--minus]"></span>
+                            </button>
+                            <span class="w-6 text-center">{{ item.quantity }}</span>
+                            <button class="btn btn-xs btn-circle btn-ghost"
+                                    (click)="updateQuantity(item.id, item.quantity + 1)">
+                                <span class="icon-[bx--plus]"></span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="text-right font-medium">
+                                {{ item.price * item.quantity | currency }}
+                            </div>
+                            <button class="btn btn-ghost btn-xs ml-2" (click)="removeItem(item.id)">
+                                <span class="icon-[bx--x]"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="divider my-0"></div>
+                }
+
+                <div class="flex justify-between font-bold mt-2">
+                    <span>Total:</span>
+                    <span>{{ getCartTotal() | currency }}</span>
+                </div>
+
+                <button class="btn btn-primary w-full mt-2">Checkout</button>
+            } @else {
+                <div class="text-center py-4">
+                    <div class="text-4xl mb-2">🛒</div>
+                    <p>Your cart is empty</p>
+                    <p class="text-sm opacity-70 mt-1">Add some products to your cart</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -2,11 +2,13 @@ import {Component, inject} from '@angular/core';
 import {InventoryService} from '../../services/inventory.service';
 import {AsyncPipe} from '@angular/common';
 import {Observable} from 'rxjs';
+import {ItemComponent} from '../../atoms/item/item.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    AsyncPipe
+      AsyncPipe,
+      ItemComponent
   ],
   templateUrl: './dashboard.component.html'
 })

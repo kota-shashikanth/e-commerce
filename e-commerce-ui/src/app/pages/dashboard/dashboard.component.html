@@ -1,20 +1,7 @@
 @if (inventory$ | async; as inventory) {
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     @for (item of inventory; track item.id) {
-      <div class="card border border-default/50 shadow-md">
-        <div class="card-body">
-          <div class="flex justify-between items-center">
-            <h2 class="card-title">{{ item.productName }}</h2>
-            <div class="badge badge-info badge-outline badge-sm">{{ item.category }}</div>
-          </div>
-          <p class="text-lg font-bold">${{ item.price.toFixed(2) }}</p>
-          <div class="mt-2">Available: {{ item.quantity }}</div>
-          <div class="card-actions justify-end mt-4">
-            <button class="btn btn-primary btn-sm">View Details</button>
-            <button class="btn btn-outline btn-sm">Add to Cart</button>
-          </div>
-        </div>
-      </div>
+        <app-item [item]="item"></app-item>
     }
   </div>
 }
