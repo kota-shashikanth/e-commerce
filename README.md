@@ -3,6 +3,24 @@
 This project demonstrates the integration of Apache Kafka with Spring Boot microservices. It consists of three
 microservices that communicate through Kafka events.
 
+## Demo Video
+
+Check out the demo video to see the application in action:
+
+<video width="100%" controls>
+  <source src="assets/e-commerce.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+[Download Demo Video](assets/e-commerce.mp4)
+
+The video demonstrates:
+
+- The complete order flow from frontend to backend services
+- Real-time inventory updates via Kafka events
+- Email notifications triggered by order events
+- The responsive UI with theme switching capabilities
+
 ## Architecture
 
 ```plaintext

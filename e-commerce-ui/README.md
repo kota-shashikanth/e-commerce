@@ -2,6 +2,25 @@
 
 This is the frontend application for the E-Commerce Microservices project. It provides a user interface for interacting with the backend microservices.
 
+## Demo Video
+
+Check out the demo video to see the application in action:
+
+<video width="100%" controls>
+  <source src="../assets/e-commerce.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+[Download Demo Video](../assets/e-commerce.mp4)
+
+The video demonstrates:
+
+- The responsive dashboard with inventory display
+- Theme switching functionality
+- Shopping cart operations
+- Checkout process with form validation
+- Admin interface for inventory management
+
 ## Architecture Overview
 
 ```
