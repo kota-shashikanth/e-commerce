@@ -24,7 +24,14 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getAllInventory());
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{id}")
+    public ResponseEntity<Inventory> getInventoryById(@PathVariable String id) {
+        return inventoryService.getInventoryById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/product/{productId}")
     public ResponseEntity<Inventory> getInventoryByProductId(@PathVariable String productId) {
         return inventoryService.getInventoryByProductId(productId)
                 .map(ResponseEntity::ok)

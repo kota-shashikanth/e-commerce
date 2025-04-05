@@ -1,0 +1,23 @@
+<div [formGroup]="additionalForm">
+  <h2 class="text-xl font-semibold mb-4">Additional Information</h2>
+
+  <!-- Save Information -->
+  <div class="form-control mb-4">
+    <label class="label cursor-pointer justify-start gap-2">
+      <input class="checkbox checkbox-primary" formControlName="saveInfo" type="checkbox"/>
+      <span class="label-text">Save this information for next time</span>
+    </label>
+  </div>
+
+  <!-- Order Notes -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Order Notes (Optional)</span>
+    </label>
+    <textarea
+      class="textarea textarea-bordered h-24"
+      formControlName="notes"
+      placeholder="Special instructions for delivery, etc."
+    ></textarea>
+  </div>
+</div>

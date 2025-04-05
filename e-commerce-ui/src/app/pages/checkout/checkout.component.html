@@ -1,0 +1,47 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Checkout Form (2/3 width on large screens) -->
+    <div class="lg:col-span-2">
+      <div class="bg-base-100 rounded-lg shadow-lg p-6">
+        <form (ngSubmit)="onSubmit()" [formGroup]="checkoutForm" class="space-y-6">
+
+          <!-- Customer Information -->
+          <app-customer-info (formReady)="handleCustomerForm($event)"></app-customer-info>
+
+          <!-- Shipping Information -->
+          <app-shipping-address (formReady)="handleShippingForm($event)"></app-shipping-address>
+
+          <!-- Payment Information -->
+          <app-payment-info (formReady)="handlePaymentForm($event)"></app-payment-info>
+
+          <!-- Additional Information -->
+          <app-additional-info (formReady)="handleAdditionalForm($event)"></app-additional-info>
+
+          <!-- Submit Button (Hidden on mobile, shown in order summary) -->
+          <div class="mt-8 hidden lg:block">
+            <button
+              [disabled]="isSubmitting"
+              class="btn btn-primary w-full"
+              type="submit"
+            >
+              @if (isSubmitting) {
+                <span class="loading loading-spinner loading-sm mr-2"></span>
+              }
+              Place Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Order Summary (1/3 width on large screens) -->
+    <div class="lg:col-span-1">
+      <app-order-summary
+        [cartItems$]="cartItems$"
+        [isSubmitting]="isSubmitting"
+      ></app-order-summary>
+    </div>
+  </div>
+</div>

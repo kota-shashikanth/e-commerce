@@ -1,0 +1,120 @@
+<div [formGroup]="paymentForm">
+  <h2 class="text-xl font-semibold mb-4">Payment Information</h2>
+
+  <!-- Payment Method -->
+  <div class="form-control mb-4">
+    <label class="label">
+      <span class="label-text">Payment Method</span>
+    </label>
+    <div class="flex flex-wrap gap-2">
+      @for (method of paymentMethods; track method.id) {
+        <label class="label cursor-pointer justify-start gap-2 bg-base-200 px-4 py-2 rounded-lg">
+          <input
+            type="radio"
+            [value]="method.id"
+            formControlName="paymentMethod"
+            class="radio radio-primary"
+          />
+          <span class="label-text">{{ method.name }}</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4">
+    <!-- Card Name -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Name on Card</span>
+      </label>
+      <input
+        [class.input-error]="f['cardName'].invalid && f['cardName'].touched"
+        class="input input-bordered w-full"
+        formControlName="cardName"
+        type="text"
+      />
+      @if (f['cardName'].invalid && f['cardName'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">Name on card is required</span>
+        </label>
+      }
+    </div>
+
+    <!-- Card Number -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Card Number</span>
+      </label>
+      <input
+        [class.input-error]="f['cardNumber'].invalid && f['cardNumber'].touched"
+        class="input input-bordered w-full"
+        formControlName="cardNumber"
+        placeholder="1234 5678 9012 3456"
+        type="text"
+      />
+      @if (f['cardNumber'].invalid && f['cardNumber'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (f['cardNumber'].errors?.['required']) {
+              Card number is required
+            } @else if (f['cardNumber'].errors?.['pattern']) {
+              Please enter a valid 16-digit card number
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Expiry Date -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Expiry Date</span>
+        </label>
+        <input
+          [class.input-error]="f['expiryDate'].invalid && f['expiryDate'].touched"
+          class="input input-bordered w-full"
+          formControlName="expiryDate"
+          placeholder="MM/YY"
+          type="text"
+        />
+        @if (f['expiryDate'].invalid && f['expiryDate'].touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">
+              @if (f['expiryDate'].errors?.['required']) {
+                Expiry date is required
+              } @else if (f['expiryDate'].errors?.['pattern']) {
+                Please enter a valid date (MM/YY)
+              }
+            </span>
+          </label>
+        }
+      </div>
+
+      <!-- CVV -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">CVV</span>
+        </label>
+        <input
+          [class.input-error]="f['cvv'].invalid && f['cvv'].touched"
+          class="input input-bordered w-full"
+          formControlName="cvv"
+          placeholder="123"
+          type="text"
+        />
+        @if (f['cvv'].invalid && f['cvv'].touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">
+              @if (f['cvv'].errors?.['required']) {
+                CVV is required
+              } @else if (f['cvv'].errors?.['pattern']) {
+                Please enter a valid CVV
+              }
+            </span>
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+</div>

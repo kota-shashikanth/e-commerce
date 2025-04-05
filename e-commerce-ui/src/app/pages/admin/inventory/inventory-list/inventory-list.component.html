@@ -1,0 +1,80 @@
+<div class="mb-6 flex justify-between items-center">
+  <h2 class="text-xl font-bold">Inventory Management</h2>
+  <a class="btn btn-primary" routerLink="/admin/inventory/new">
+    <span class="icon-[bx--plus] mr-2"></span>
+    Add New Item
+  </a>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="table table-zebra w-full">
+    <thead>
+    <tr>
+      <th>Image</th>
+      <th>Product ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @if (inventory$ | async; as inventory) {
+        @if (inventory.length === 0) {
+          <tr>
+            <td colspan="8" class="text-center py-4">No inventory items found</td>
+          </tr>
+        } @else {
+          @for (item of inventory; track item.id) {
+            <tr>
+              <td>
+                <div class="avatar">
+                  <div class="w-12 h-12 rounded-md overflow-hidden bg-base-200">
+                    <img
+                      [src]="item.imageUrl || 'https://placehold.co/100x100/3d4451/ffffff?text=No+Image'"
+                      [alt]="item.productName"
+                      class="object-cover w-full h-full"
+                      onerror="this.src='https://placehold.co/100x100/3d4451/ffffff?text=No+Image'"
+                    />
+                  </div>
+                </div>
+              </td>
+              <td>{{ item.productId }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.price | currency }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>
+                <div class="badge"
+                     [class.badge-success]="item.quantity > 0"
+                     [class.badge-error]="item.quantity <= 0">
+                  {{ item.quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                </div>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <a [routerLink]="['/admin/inventory/edit', item.id]" class="btn btn-sm btn-info btn-outline">
+                    <span class="icon-[bx--edit]"></span>
+                  </a>
+                  <button class="btn btn-sm btn-outline btn-error" (click)="deleteItem(item.id!)">
+                    <span class="icon-[bx--trash]"></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      } @else {
+        <tr>
+          <td colspan="8" class="text-center py-4">
+            <div class="flex justify-center">
+              <span class="loading loading-spinner loading-md"></span>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

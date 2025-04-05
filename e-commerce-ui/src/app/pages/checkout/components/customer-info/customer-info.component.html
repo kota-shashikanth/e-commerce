@@ -1,0 +1,101 @@
+<div [formGroup]="customerForm">
+  <h2 class="text-xl font-semibold mb-4">Customer Information</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- First Name -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">First Name</span>
+      </label>
+      <input
+        [class.input-error]="f['firstName'].invalid && f['firstName'].touched"
+        class="input input-bordered w-full"
+        formControlName="firstName"
+        type="text"
+      />
+      @if (f['firstName'].invalid && f['firstName'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (f['firstName'].errors?.['required']) {
+              First name is required
+            } @else if (f['firstName'].errors?.['minlength']) {
+              First name must be at least 2 characters
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Last Name -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Last Name</span>
+      </label>
+      <input
+        [class.input-error]="f['lastName'].invalid && f['lastName'].touched"
+        class="input input-bordered w-full"
+        formControlName="lastName"
+        type="text"
+      />
+      @if (f['lastName'].invalid && f['lastName'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (f['lastName'].errors?.['required']) {
+              Last name is required
+            } @else if (f['lastName'].errors?.['minlength']) {
+              Last name must be at least 2 characters
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Email -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Email</span>
+      </label>
+      <input
+        [class.input-error]="f['email'].invalid && f['email'].touched"
+        class="input input-bordered w-full"
+        formControlName="email"
+        type="email"
+      />
+      @if (f['email'].invalid && f['email'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (f['email'].errors?.['required']) {
+              Email is required
+            } @else if (f['email'].errors?.['email']) {
+              Please enter a valid email address
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Phone -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Phone</span>
+      </label>
+      <input
+        [class.input-error]="f['phone'].invalid && f['phone'].touched"
+        class="input input-bordered w-full"
+        formControlName="phone"
+        placeholder="e.g. +1 555-123-4567"
+        type="tel"
+      />
+      @if (f['phone'].invalid && f['phone'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (f['phone'].errors?.['required']) {
+              Phone number is required
+            } @else if (f['phone'].errors?.['pattern']) {
+              Please enter a valid phone number
+            }
+          </span>
+        </label>
+      }
+    </div>
+  </div>
+</div>

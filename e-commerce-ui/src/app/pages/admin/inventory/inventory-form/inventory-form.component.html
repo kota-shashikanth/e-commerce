@@ -1,0 +1,180 @@
+<div class="mb-6 flex justify-between items-center">
+  <h2 class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Add' }} Inventory Item</h2>
+  <a class="btn btn-outline" routerLink="/admin/inventory">
+    <span class="icon-[bx--arrow-back] mr-2"></span>
+    Back to List
+  </a>
+</div>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="inventoryForm" class="space-y-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Product ID -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Product ID</span>
+      </label>
+      <input
+        [class.input-error]="productIdControl?.invalid && productIdControl?.touched"
+        class="input input-bordered w-full"
+        formControlName="productId"
+        type="text"
+      />
+      @if (productIdControl?.invalid && productIdControl?.touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (productIdControl?.errors?.['required']) {
+              Product ID is required
+            } @else if (productIdControl?.errors?.['pattern']) {
+              Product ID can only contain letters, numbers, hyphens, and underscores
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Product Name -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Product Name</span>
+      </label>
+      <input
+        [class.input-error]="productNameControl?.invalid && productNameControl?.touched"
+        class="input input-bordered w-full"
+        formControlName="productName"
+        type="text"
+      />
+      @if (productNameControl?.invalid && productNameControl?.touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (productNameControl?.errors?.['required']) {
+              Product name is required
+            } @else if (productNameControl?.errors?.['minlength']) {
+              Product name must be at least 3 characters
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Category -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Category</span>
+      </label>
+      <input
+        [class.input-error]="categoryControl?.invalid && categoryControl?.touched"
+        class="input input-bordered w-full"
+        formControlName="category"
+        list="category-suggestions"
+        placeholder="Enter a category"
+        type="text"
+      />
+      <datalist id="category-suggestions">
+        @for (category of categories; track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </datalist>
+      @if (categoryControl?.invalid && categoryControl?.touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">Category is required</span>
+        </label>
+      }
+    </div>
+
+    <!-- Price -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Price</span>
+      </label>
+      <div class="input-group">
+        <span>$</span>
+        <input
+          [class.input-error]="priceControl?.invalid && priceControl?.touched"
+          class="input input-bordered w-full"
+          formControlName="price"
+          min="0"
+          step="0.01"
+          type="number"
+        />
+      </div>
+      @if (priceControl?.invalid && priceControl?.touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (priceControl?.errors?.['required']) {
+              Price is required
+            } @else if (priceControl?.errors?.['min']) {
+              Price must be greater than or equal to 0
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Quantity -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Quantity</span>
+      </label>
+      <input
+        [class.input-error]="quantityControl?.invalid && quantityControl?.touched"
+        class="input input-bordered w-full"
+        formControlName="quantity"
+        min="0"
+        type="number"
+      />
+      @if (quantityControl?.invalid && quantityControl?.touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (quantityControl?.errors?.['required']) {
+              Quantity is required
+            } @else if (quantityControl?.errors?.['min']) {
+              Quantity must be greater than or equal to 0
+            }
+          </span>
+        </label>
+      }
+    </div>
+
+    <!-- Image URL -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Image URL (optional)</span>
+      </label>
+      <input
+        class="input input-bordered w-full"
+        formControlName="imageUrl"
+        type="text"
+      />
+    </div>
+  </div>
+
+  <!-- Image Preview -->
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Image Preview</span>
+    </label>
+    <div class="h-40 w-fit rounded-md overflow-hidden bg-base-200">
+      <img
+        [src]="inventoryForm.get('imageUrl')?.value || 'https://placehold.co/400x400/3d4451/ffffff?text=No+Image'"
+        alt="Product Preview"
+        class="h-full"
+        onerror="this.src='https://placehold.co/400x400/3d4451/ffffff?text=No+Image'"
+      />
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="flex justify-end gap-4">
+    <a class="btn btn-ghost" routerLink="/admin/inventory">Cancel</a>
+    <button
+      [disabled]="inventoryForm.invalid || isSubmitting"
+      class="btn btn-primary"
+      type="submit"
+    >
+      @if (isSubmitting) {
+        <span class="loading loading-spinner loading-sm mr-2"></span>
+      }
+      {{ isEditMode ? 'Update' : 'Create' }} Item
+    </button>
+  </div>
+</form>

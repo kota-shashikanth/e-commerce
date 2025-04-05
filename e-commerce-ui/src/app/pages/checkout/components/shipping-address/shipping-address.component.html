@@ -1,0 +1,107 @@
+<div [formGroup]="shippingForm">
+  <h2 class="text-xl font-semibold mb-4">Shipping Address</h2>
+  <div class="grid grid-cols-1 gap-4">
+    <!-- Address -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Address</span>
+      </label>
+      <input
+        [class.input-error]="f['address'].invalid && f['address'].touched"
+        class="input input-bordered w-full"
+        formControlName="address"
+        type="text"
+      />
+      @if (f['address'].invalid && f['address'].touched) {
+        <label class="label">
+          <span class="label-text-alt text-error">Address is required</span>
+        </label>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- City -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">City</span>
+        </label>
+        <input
+          [class.input-error]="f['city'].invalid && f['city'].touched"
+          class="input input-bordered w-full"
+          formControlName="city"
+          type="text"
+        />
+        @if (f['city'].invalid && f['city'].touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">City is required</span>
+          </label>
+        }
+      </div>
+
+      <!-- State -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">State/Province</span>
+        </label>
+        <input
+          [class.input-error]="f['state'].invalid && f['state'].touched"
+          class="input input-bordered w-full"
+          formControlName="state"
+          type="text"
+        />
+        @if (f['state'].invalid && f['state'].touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">State is required</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Zip Code -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">ZIP/Postal Code</span>
+        </label>
+        <input
+          [class.input-error]="f['zipCode'].invalid && f['zipCode'].touched"
+          class="input input-bordered w-full"
+          formControlName="zipCode"
+          type="text"
+        />
+        @if (f['zipCode'].invalid && f['zipCode'].touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">
+              @if (f['zipCode'].errors?.['required']) {
+                ZIP code is required
+              } @else if (f['zipCode'].errors?.['pattern']) {
+                Please enter a valid ZIP code
+              }
+            </span>
+          </label>
+        }
+      </div>
+
+      <!-- Country -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Country</span>
+        </label>
+        <select
+          [class.select-error]="f['country'].invalid && f['country'].touched"
+          class="select select-bordered w-full"
+          formControlName="country"
+        >
+          @for (country of countries; track country) {
+            <option [value]="country">{{ country }}</option>
+          }
+        </select>
+        @if (f['country'].invalid && f['country'].touched) {
+          <label class="label">
+            <span class="label-text-alt text-error">Country is required</span>
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,7 +20,7 @@ db.inventory.insertMany([
         quantity: 50,
         price: 999.99,
         category: "Electronics",
-        isInStock: true
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Laptop"
     },
     {
         productId: "P002",
@@ -28,7 +28,7 @@ db.inventory.insertMany([
         quantity: 100,
         price: 699.99,
         category: "Electronics",
-        isInStock: true
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Smartphone"
     },
     {
         productId: "P003",
@@ -36,7 +36,7 @@ db.inventory.insertMany([
         quantity: 200,
         price: 149.99,
         category: "Electronics",
-        isInStock: true
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Headphones"
     },
     {
         productId: "P004",
@@ -44,7 +44,7 @@ db.inventory.insertMany([
         quantity: 300,
         price: 19.99,
         category: "Clothing",
-        isInStock: true
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=T-Shirt"
     },
     {
         productId: "P005",
@@ -52,31 +52,31 @@ db.inventory.insertMany([
         quantity: 150,
         price: 49.99,
         category: "Clothing",
-        isInStock: true
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Jeans"
     },
     {
         productId: "P006",
         productName: "Coffee Maker",
         quantity: 75,
         price: 89.99,
-        category: "Home Appliances",
-        isInStock: true
+        category: "Home",
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Coffee+Maker"
     },
     {
         productId: "P007",
         productName: "Blender",
         quantity: 60,
         price: 59.99,
-        category: "Home Appliances",
-        isInStock: true
+        category: "Home",
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Blender"
     },
     {
         productId: "P008",
         productName: "Test Product",
         quantity: 10,
         price: 29.99,
-        category: "Test",
-        isInStock: true
+        category: "Other",
+        imageUrl: "https://placehold.co/600x400/3d4451/ffffff?text=Test+Product"
     }
 ]);
 

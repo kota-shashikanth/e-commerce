@@ -2,10 +2,11 @@ import {Component, inject} from '@angular/core';
 import {CartService} from '../../services/cart.service';
 import {AsyncPipe, CurrencyPipe} from '@angular/common';
 import {CartIconComponent} from '../cart-icon/cart-icon.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
     selector: 'app-cart',
-    imports: [AsyncPipe, CurrencyPipe, CartIconComponent],
+  imports: [AsyncPipe, CurrencyPipe, CartIconComponent, RouterLink],
     templateUrl: './cart.component.html'
 })
 export class CartComponent {

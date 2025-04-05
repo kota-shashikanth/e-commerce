@@ -22,7 +22,6 @@ public class Inventory {
     private int quantity;
     private double price;
     private String category;
-    private boolean isInStock;
     private String imageUrl;
 
     // Helper method to check if there's enough stock
@@ -34,9 +33,13 @@ public class Inventory {
     public void reduceStock(int quantity) {
         if (this.quantity >= quantity) {
             this.quantity -= quantity;
-            this.isInStock = this.quantity > 0;
         } else {
             throw new IllegalArgumentException("Not enough stock available");
         }
+    }
+
+    // Helper method to check if item is in stock
+    public boolean isInStock() {
+        return this.quantity > 0;
     }
 }

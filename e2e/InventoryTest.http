@@ -33,7 +33,24 @@ Content-Type: application/json
     });
 %}
 
-### 3. Get Inventory Item by ProductId
+### 3.A Get Inventory Item by Id
+GET {{baseUrl}}/inventory/67ed44c443ca8cbbc96b140b
+
+> {%
+    client.test("Get Inventory Item - Status Code", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Get Inventory Item - Product Name", function () {
+        client.assert(response.body.productName === "Integration Test Product", "Product name does not match");
+    });
+
+    client.test("Get Inventory Item - Quantity", function () {
+        client.assert(response.body.quantity === 50, "Quantity does not match");
+    });
+%}
+
+### 3.B Get Inventory Item by ProductId
 GET {{baseUrl}}/inventory/P010
 
 > {%
